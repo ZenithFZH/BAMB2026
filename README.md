@@ -28,7 +28,9 @@ Where provided, tutorials are available in two versions:
   - Tutorial: [notebook](Module2/part_2/module2_part2.ipynb) [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bambschool/BAMB2026/blob/main/Module2/part_2/module2_part2.ipynb)
   - Solutions: [notebook](Module2/part_2/module2_part2_solutions.ipynb) [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bambschool/BAMB2026/blob/main/Module2/part_2/module2_part2_solutions.ipynb)
 
-## Mini-project datasets
+## Mini-projects
 
-- [Dataset guide and project links](datasets/README.md)
+### Module 1
+
+- [Project and dataset guide](datasets/README.md)
 - [Mini-Project 1 dataset description](datasets/BAMB%21%202026%20-%20datasets%20for%20mini-Project%201.pdf)
