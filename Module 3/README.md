@@ -15,7 +15,7 @@ We will try to run everything on Google Colab. However, if you wish to run the c
 > [!WARNING]
 > If you are on Windows, we *highly* recommend installing [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install). Open PowerShell or Windows command prompt in administrator mode by right-clicking and selecting "Run as administrator", enter the ```wsl --install``` command, then restart your machine. Then open [VSCode](https://code.visualstudio.com/Download), hit `Ctrl + Shift + P`, and search "WSL" to select the "WSL: Connect to WSL". Check that the bottom-left of your VSCode window says "WSL: Ubuntu".
 
-We use [Poetry](https://python-poetry.org/), a modern python packaging and dependency management software. Hopefully, this will make development a breeze and keep track of new packages that any developer installs in the pyproject.toml file. If you are unfamiliar with it, [here's a quick tutorial](https://www.youtube.com/watch?v=0f3moPe_bhk). To get started, you can use the following commands:
+We use [uv](https://docs.astral.sh/uv/), a modern python packaging and project management software. Hopefully, this will make development a breeze and keep track of new packages that any developer installs in the pyproject.toml file. It is also *ridiculously* fast, and it will fetch the right version of python for you, so you don't have to worry about that either. If you are unfamiliar with it, [here's a quick tutorial](https://docs.astral.sh/uv/getting-started/). To get started, you can use the following commands:
 
 ```sh
 # clone the BAMB2026 git repository if you don't already have it
@@ -30,24 +30,35 @@ cd "BAMB2026/Module 3/"
 git checkout main
 git pull
 
-# install poetry if you don't have it already
-pip install poetry
-
-# configure virtual env to be created within the project
-poetry config virtualenvs.in-project true
+# install uv if you don't have it already
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # create the environment and install dependencies
-poetry install
-
-# activate the virtual environment
-poetry shell
+uv sync
 ```
 
-`poetry shell` is sometimes buggy (see [this](https://stackoverflow.com/questions/60580332/poetry-virtual-environment-already-activated)). If it doesn't work properly, you can activate it with `source .venv/bin/activate` if your virtual environment is in your project folder or with `source $(poetry env info --path)/bin/activate` if you don't know where it is.
+That's it. `uv sync` creates the virtual environment in `.venv` within the project folder, grabs the correct python version, and installs everything from the lock file, so everyone gets exactly the same setup.
+
+You don't actually need to activate the environment: prefix any command with `uv run` and it will run inside the project's environment. If you would rather activate it anyway, `source .venv/bin/activate` does the job as usual.
 
 ## Usage
 
-Include some examples of how to run scripts and/or notebooks.
+To work through the tutorial notebook, launch it with:
+
+```sh
+# from the "Module 3/" folder
+uv run jupyter lab part1_rl_basics/tutorial_3a.ipynb
+```
+
+If you prefer VSCode, just open the notebook and select the `.venv` interpreter in the top-right kernel picker.
+
+Anything else you want to run goes through `uv run` in the same way, for instance the tests:
+
+```sh
+uv run pytest
+```
+
+And if you ever need to add a package, `uv add <package>` will install it and record it in `pyproject.toml` and the lock file for everyone else.
 
 ## VS Code extensions
 

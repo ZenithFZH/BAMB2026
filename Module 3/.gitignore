@@ -4,3 +4,8 @@
 
 # ignore python cache files
 *__pycache__*
+
+# ignore tool caches
+.pytest_cache
+.ruff_cache
+.ipynb_checkpoints

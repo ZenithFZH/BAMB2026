@@ -1,6 +1,38 @@
-import numpy as np
+import matplotlib.animation as animation
 import matplotlib.pyplot as plt
+import numpy as np
 import seaborn as sns
+from IPython.display import HTML, display
+
+
+def animate_frames(frames: list, fps: int = 10) -> None:
+    """Play a list of rgb_array frames as an inline animation.
+
+    This works both locally and on Google Colab, unlike render_mode="human",
+    which needs a display that Colab does not have.
+    """
+    if not frames:
+        return
+
+    # keep the embedded animation small enough for the notebook to stay happy
+    plt.rcParams["animation.embed_limit"] = 100  # MB
+
+    fig, ax = plt.subplots(figsize=(5, 4))
+    ax.axis("off")
+    image = ax.imshow(frames[0])
+
+    def update(frame_index: int):
+        image.set_data(frames[frame_index])
+        return (image,)
+
+    anim = animation.FuncAnimation(
+        fig, update, frames=len(frames), interval=1000 / fps, blit=True
+    )
+
+    # close the figure so the last frame isn't also shown as a static image
+    plt.close(fig)
+    display(HTML(anim.to_jshtml()))
+
 
 def plot_frozenlake_environment(env):
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(4, 4))
@@ -9,6 +41,7 @@ def plot_frozenlake_environment(env):
     ax.axis("off")
     ax.set_title("FrozenLake environment")
     plt.show()
+
 
 def calculate_moving_average(reward_history, window_size=100):
     cumsum = np.cumsum(np.insert(reward_history, 0, 0))
@@ -20,26 +53,29 @@ def calculate_moving_average(reward_history, window_size=100):
 
     return np.concatenate([padded_avg, moving_avg])
 
+
 def plot_performance(reward_history):
     plt.figure(figsize=(6, 4))
     plt.plot(reward_history)
     plt.plot(calculate_moving_average(reward_history))
-    plt.title('Performance over Episodes')
-    plt.xlabel('Episode')
-    plt.ylabel('Total Reward')
+    plt.title("Performance over Episodes")
+    plt.xlabel("Episode")
+    plt.ylabel("Total Reward")
     plt.grid(True)
     plt.show()
+
 
 def plot_performance_comparison(rewards_1, label_1, rewards_2, label_2):
     # Plot results
     plt.figure(figsize=(6, 4))
     plt.plot(calculate_moving_average(rewards_1), label=label_1)
     plt.plot(calculate_moving_average(rewards_2), label=label_2)
-    plt.title(f'{label_1} vs {label_2} Performance')
-    plt.xlabel('Episode')
-    plt.ylabel('Total Reward')
+    plt.title(f"{label_1} vs {label_2} Performance")
+    plt.xlabel("Episode")
+    plt.ylabel("Total Reward")
     plt.legend()
     plt.show()
+
 
 def qtable_directions_map(qtable, map_size) -> tuple:
     """Get the best learned action & map it to arrows."""

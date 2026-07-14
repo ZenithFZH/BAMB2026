@@ -1,6 +1,7 @@
 from typing import Protocol
-import numpy as np
+
 import gymnasium as gym
+import numpy as np
 from gymnasium import spaces
 from minigrid.core.grid import Grid
 from minigrid.core.mission import MissionSpace
@@ -9,11 +10,9 @@ from minigrid.minigrid_env import MiniGridEnv
 
 
 class Environment(Protocol):
-    def step(self, action) -> tuple:
-        ...
+    def step(self, action) -> tuple: ...
 
-    def reset(self) -> tuple:
-        ...
+    def reset(self) -> tuple: ...
 
 
 class CartPoleEnvironment:
@@ -54,7 +53,7 @@ class CartPoleEnvironment:
         return discrete_next_state, reward, terminated, truncated, info
 
     def render(self):
-        self.env.render()
+        return self.env.render()
 
     def close(self):
         self.env.close()
@@ -67,7 +66,7 @@ class CustomGridEnv(MiniGridEnv):
         goal_pos=(98, 98),
         size=100,
         max_steps=1000,
-        render_mode="rgb_array"
+        render_mode="rgb_array",
     ):
         self.agent_start_pos = agent_start_pos
         self.goal_pos = goal_pos
@@ -111,13 +110,20 @@ class CustomGridEnv(MiniGridEnv):
         self.step_count += 1
 
         direction = [
-            (0, 0), (1, 0), (1, 1), (0, 1), (-1, 1),
-            (-1, 0), (-1, -1), (0, -1), (1, -1)
+            (0, 0),
+            (1, 0),
+            (1, 1),
+            (0, 1),
+            (-1, 1),
+            (-1, 0),
+            (-1, -1),
+            (0, -1),
+            (1, -1),
         ]
 
         new_pos = (
             self.agent_pos[0] + direction[action][0],
-            self.agent_pos[1] + direction[action][1]
+            self.agent_pos[1] + direction[action][1],
         )
 
         if 0 <= new_pos[0] < self.width and 0 <= new_pos[1] < self.height:
@@ -136,8 +142,9 @@ class CustomGridEnv(MiniGridEnv):
         state = self._get_state()
         return state, {}
 
+
 # Register the environment
 gym.envs.registration.register(
-    id='CustomGrid-v0',
+    id="CustomGrid-v0",
     entry_point=CustomGridEnv,
 )
