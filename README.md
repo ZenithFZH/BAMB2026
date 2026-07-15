@@ -36,6 +36,8 @@ Where provided, tutorials are available in two versions:
 ### Mini-projects
 
 - [Download the Rouault et al. task (.zip)](https://github.com/bambschool/BAMB2026/raw/refs/heads/main/Module2/rouault_task.zip)
+- [Python codebase](https://github.com/dikshagup/changes_of_mind_bamb)
+- [Matlab codebase](https://github.com/marionrouault/actobscom)
 
 ## Module 3: Learning to act
 
