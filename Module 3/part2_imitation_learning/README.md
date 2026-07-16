@@ -60,18 +60,19 @@ The notebook passes `video_backend="pyav"` when it loads the dataset, and that i
 
 ## For instructors
 
-On the day, the tutorial needs three things: an assembled and calibrated SO-101 pair with a webcam on the demo laptop, wifi for the students, and one pinned LeRobot version announced to everybody. Test the arm the day before, not on the morning.
+On the day, the tutorial needs three things: an assembled and calibrated SO-101 pair on the demo laptop, both arms clamped to the table, wifi for the students, and one pinned LeRobot version announced to everybody. Test the arm the day before, not on the morning.
 
 Four commands are worth having in your fingers, all documented in the [LeRobot walkthrough](https://huggingface.co/docs/lerobot/il_robots): `lerobot-teleoperate`, `lerobot-record` (which both records demonstrations and, with `--policy.path`, runs a trained policy), `lerobot-train`, and `lerobot-replay`.
 
 ### Prepare this before the school
 
-The finale of the session (Section 5) is a policy we trained by imitation learning, driving the arm by itself. That takes two jobs, both done in advance:
+The finale of the session (Section 5) is a policy we trained by imitation learning, driving the arm by itself. The pipeline is deliberately **camera-free** — the policy is blind, which is both a logistics win (no webcam, no USB hub, no camera pose to protect) and a teaching one (its failure when the cube moves is exactly the mini-project's "give it eyes" motivation, live). Three jobs, done the day before:
 
-1. **Record ~50 pick-and-place episodes on our arm** with `lerobot-record`, and push them to the Hub. About an hour of teleoperation. This dataset does double duty: it trains the demo policy, and it is what the mini-project groups train on. They must not use the public dataset for their final policy — a policy fit to somebody else's table cannot work on ours, however good its score.
-2. **Train ACT on it** with `lerobot-train` on a free Colab GPU (a few hours, unattended), and check it does the task. Then deploy it in the session with `lerobot-record --policy.path=...`.
+1. **Clamp the arm base and tape one cube start position and the bin position.** Geometry relative to the base is the only thing a blind policy knows, so the tape is the whole contract between training and deployment.
+2. **Record ~50 pick-and-place episodes on our arm** with `lerobot-record` and no `--robot.cameras` flag, the cube starting on its tape every episode — about half an hour. Push to the Hub afterwards; it is one of the two datasets the mini-project offers.
+3. **Train the finale policy** with [`train_blind_chunked.py`](./train_blind_chunked.py) (the notebook's blind clone plus action chunking — minutes on a laptop CPU, no GPU), then verify with [`deploy_blind_chunked.py`](./deploy_blind_chunked.py), dry-run first.
 
-**Tape the camera down, and mark the cube's start positions on the table.** If the camera pose shifts between recording and any later deployment, every vision policy dies at once and nobody will be able to work out why. This is the single most likely thing to ruin the demo.
+The original camera-and-ACT pipeline is documented in [`robot_setup.md`](./robot_setup.md), for a future edition with a webcam and a GPU. Note for that path: lerobot 0.5.1's ACT refuses to train on an image-free dataset, which is why the blind pipeline has its own training script.
 
 **Fallback**, if the trained policy is not ready or misbehaves on the day: teleoperate live, then `lerobot-replay` a recorded episode. Less spectacular, still makes the point. Replaying an episode from the *public* dataset is a nice bonus lesson in its own right — the arm reproduces the motion perfectly and grasps thin air, because their cube was somewhere else.
 

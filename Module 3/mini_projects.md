@@ -11,15 +11,27 @@ job is to close the gap between those two things.
 
 ## The data
 
-**Train on the dataset we recorded on our own arm.** The Hub id will be given to you in the
-session.
+Train on whichever dataset serves your question — but physics decides what can be deployed,
+so know what each one buys you.
 
-This matters more than it sounds. Do **not** train your final policy on the public
-[`lerobot/svla_so101_pickplace`](https://huggingface.co/datasets/lerobot/svla_so101_pickplace)
-data used in the tutorial. It is fine for prototyping while you get set up, but it was recorded
-on a different arm, on a different table, with the camera somewhere else. A policy fit to it will
-reach beautifully for where *their* cube used to be, and miss ours entirely, no matter how good
-its held-out score is. Demonstrations do not transfer across scenes.
+**The public tutorial dataset,**
+[`lerobot/svla_so101_pickplace`](https://huggingface.co/datasets/lerobot/svla_so101_pickplace).
+The only data with camera frames, so anything visual — the "give it eyes" upgrade below — is
+explored here. But be clear about deployment: a *vision* policy trained on it can never drive
+our arm, because it would be looking for a table, a lighting, a camera angle that are not
+there. Demonstrations do not transfer across scenes. A *blind* policy trained on it, however,
+**can** be deployed: properly calibrated SO-101s agree about what "joint 2 at 45°" means, so a
+state-only policy carries across arms the way `lerobot-replay` does, and on deployment day we
+place the cube where your policy reaches — the same trick the tutorial used for replay. One
+catch, and it is a good one: their demonstrators *varied* the cube position (their policy had
+eyes), so blindly cloning all the episodes averages incompatible trajectories. Choosing which
+demonstrations to clone is a real project in itself.
+
+**Our arm's dataset** (Hub id announced in the session): ~50 camera-free episodes recorded on
+the demo arm with the cube taped to one spot — the dataset behind the Section 5 finale. Six
+joint angles in, six motor targets out, no images. Consistent by construction: policies
+trained on it inherit the taped geometry of the demo table, so this is the reliable route to
+a deployable policy.
 
 Everything loads through `LeRobotDataset`, exactly as in the tutorial.
 
@@ -29,9 +41,12 @@ The tutorial's clone is deliberately minimal, and Section 4.1 named the two thin
 Fixing either one is a real result. Fixing both is roughly what a deployable policy is.
 
 **1. Give it eyes.** The clone's only input is its own joint angles, so when the cube moves it
-reaches for the *average* cube. This is not fixable by making the network bigger — the
-information is not in the input. Feed the camera in: a small convolutional network on downsampled
-frames, alongside the joint angles. Trains on a laptop in minutes.
+reaches for the *average* cube — you watched exactly this failure in the Section 5 finale. This
+is not fixable by making the network bigger: the information is not in the input. Feed the
+camera in: a small convolutional network on downsampled frames, alongside the joint angles.
+Trains on a laptop in minutes. (Use the public dataset — it is the one with images. A vision
+policy is judged on held-out episodes rather than on the arm, and a careful analysis of *when*
+vision helps is exactly the kind of figure we want to see.)
 
 **2. Let it plan ahead.** The clone re-decides from scratch at every frame, on top of its own
 accumulating errors, so it drifts into states no demonstrator ever visited. Predict a *chunk* of
@@ -73,11 +88,18 @@ presentation. A negative result you can explain beats a positive result you cann
 Submit a trained policy by the deadline announced in the session. We cannot run thirty policies
 on one arm, so we will pick **the best few** and run those in front of everyone on the last day.
 
-Two rules, and they exist because a policy that has drifted off the demonstrations will happily
-command a pose that damages a real motor:
+Three rules, and they exist because a policy that has drifted off the demonstrations will
+happily command a pose that damages a real motor:
 
+- your policy's input is the **six joint angles** — that is everything the arm can observe
+  (there is no camera on the deployment rig);
 - your policy must run at **15 Hz or better on CPU** — the arm cannot wait for you;
 - your actions will be **clamped** to the joint ranges seen in the training data, and
   rate-limited. Do not rely on the clamp: a policy that needs it is not a policy that works.
+
+We run submissions through the same harness as the finale policy
+([`deploy_blind_chunked.py`](./part2_imitation_learning/deploy_blind_chunked.py)), so the
+easiest interface to hand us is a checkpoint of that shape: state in, chunk of actions out.
+If yours differs, come talk to us before the deadline.
 
 Come and find us early with what you are trying, and we will help you scope it.

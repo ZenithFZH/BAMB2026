@@ -3,6 +3,18 @@
 Everything here is against **LeRobot 0.5.1**, which is the version pinned for the school. All
 flags below have been checked against that version.
 
+> **What we actually ran (July 2026): the camera-free variant.** No camera could be attached
+> (two USB-C ports, two arms), so the finale policy is *blind*: the tutorial's clone plus
+> action chunking, trained by [`train_blind_chunked.py`](./train_blind_chunked.py) and deployed
+> by [`deploy_blind_chunked.py`](./deploy_blind_chunked.py), on ~50 camera-free episodes with
+> the cube at a **single taped position** (a blind policy cannot adapt to a moved cube — the
+> "vary the start position" rule below is for vision policies, and its violation *is* the
+> demo's punchline). Two version-specific facts worth keeping: `lerobot-record` happily records
+> without cameras, but **`lerobot-train` with `--policy.type=act` refuses an image-free
+> dataset** ("You must provide at least one image..."), hence the custom training script. The
+> rest of this document is the with-camera pipeline, kept for a future edition with a webcam
+> and a GPU. Calibration, ports, teleop and replay sections apply to both variants unchanged.
+
 ## What we need, and why
 
 **One deliverable: ~50 teleoperated demonstrations recorded on *our* arm, pushed to the Hub.**
