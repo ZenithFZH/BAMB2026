@@ -60,7 +60,7 @@ From gridworlds to real robots: how an agent learns to act, by trial and error a
 
 Model-based reinforcement learning, non-parametric environment clustering, and Gaussian-process regression, applied to spatial foraging (Wu et al., 2025).
 
-- [Overview, setup, and data](Module%204/README.md)
+- [Overview](Module%204/README.md)
 - Part 1: Model-based reinforcement learning
   - Tutorial: [notebook](Module%204/day1_block1_dyna_q.ipynb) [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bambschool/BAMB2026/blob/Module-4/Module%204/day1_block1_dyna_q.ipynb)
 - Part 2: Chinese Restaurant Processes and non-stationary environments
