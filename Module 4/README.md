@@ -7,13 +7,13 @@ Materials for Module 4 of [BAMB! 2026](https://www.bambschool.org/), by Charley 
 
 The easiest way in is Google Colab: click a badge and run the notebook from top to bottom. The first section grabs the files it needs from this repo and installs the packages, so there is nothing to set up by hand.
 
-**Part 1 — Model-Based Reinforcement Learning** &nbsp; [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bambschool/BAMB2026/blob/Module-4/Module%204/day1_block1_dyna_q.ipynb)
+**Part 1 — Model-Based Reinforcement Learning** &nbsp; [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bambschool/BAMB2026/blob/main/Module%204/day1_block1_dyna_q.ipynb)
 
 
-**Part 2 — Chinese Restaurant Processes and Non-Stationary Environments** &nbsp; [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bambschool/BAMB2026/blob/Module-4/Module%204/day1_block2_crp_dyna.ipynb)
+**Part 2 — Chinese Restaurant Processes and Non-Stationary Environments** &nbsp; [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bambschool/BAMB2026/blob/main/Module%204/day1_block2_crp_dyna.ipynb)
 
 
-**Part 3 — Gaussian Process Regression as Bayesian Value Function Approximation** &nbsp; [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bambschool/BAMB2026/blob/Module-4/Module%204/day1_block3_gp_ucb.ipynb)
+**Part 3 — Gaussian Process Regression as Bayesian Value Function Approximation** &nbsp; [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bambschool/BAMB2026/blob/main/Module%204/day1_block3_gp_ucb.ipynb)
 
 
 ## Running locally
